@@ -139,6 +139,20 @@ idf_component_register(SRCS "main.cpp"
 
 ## Solución de Problemas
 
+### Error de FreeRTOS
+Si obtienes el error:
+```
+esp32-arduino requires CONFIG_FREERTOS_HZ=1000 (currently 100)
+```
+**Solución:** Cambia en el archivo `sdkconfig` la línea:
+```
+CONFIG_FREERTOS_HZ=100
+```
+Por:
+```
+CONFIG_FREERTOS_HZ=1000
+```
+
 ### Error de Compilación
 - Verifica que ESP-IDF esté correctamente instalado
 - Asegúrate de haber seleccionado el target correcto
