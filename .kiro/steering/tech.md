@@ -1,0 +1,62 @@
+# Technology Stack
+
+## Build System
+- **Primary**: ESP-IDF (Espressif IoT Development Framework) v5.4.2+
+- **Build Tool**: CMake with ESP-IDF's project.cmake
+- **Component Manager**: ESP-IDF Component Manager for dependency management
+- **Target**: ESP32 family microcontrollers
+
+## Frameworks & Libraries
+- **ESP-IDF**: Core framework providing low-level hardware access and advanced features
+- **Arduino-ESP32**: Arduino framework as a component (`espressif/arduino-esp32`)
+- **FreeRTOS**: Real-time operating system (configured at 1000Hz tick rate)
+
+## Development Environment
+- **IDE**: Kiro IDE with ESP-IDF extension
+- **Container**: Docker-based development environment using `espressif/idf` image
+- **Language**: C++ (main.cpp uses Arduino-style syntax)
+
+## Key Configuration
+- **FreeRTOS Tick Rate**: 1000Hz (required for Arduino compatibility)
+- **Entry Point**: `app_main()` function with `extern "C"` linkage
+- **Arduino Initialization**: `initArduino()` must be called before using Arduino functions
+
+## Common Commands
+
+### Build & Flash
+```bash
+# Build project
+idf.py build
+
+# Flash to device
+idf.py flash
+
+# Monitor serial output
+idf.py monitor
+
+# All-in-one command
+idf.py build flash monitor
+```
+
+### Configuration
+```bash
+# Open configuration menu
+idf.py menuconfig
+
+# Set target device (run once per project)
+idf.py set-target esp32
+# or esp32s2, esp32s3, esp32c3, etc.
+```
+
+### Development Setup
+```bash
+# Generate compile_commands.json for code analysis
+idf.py build
+```
+
+## Kiro IDE Commands
+- **Build**: `ESP-IDF: Build Project`
+- **Flash**: `ESP-IDF: Flash Device`
+- **Monitor**: `ESP-IDF: Monitor Device`
+- **Configure**: `ESP-IDF: Configure ESP-IDF Extension`
+- **Set Target**: `ESP-IDF: Set Espressif Device Target`
