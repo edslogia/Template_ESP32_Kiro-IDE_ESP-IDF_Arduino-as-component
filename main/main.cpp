@@ -4,6 +4,12 @@ extern "C" void app_main()
 {
     initArduino();
     pinMode(4, OUTPUT);
-    digitalWrite(4, HIGH);
-    // Do your own thing
+    
+    // LED flashing loop with 500ms intervals
+    while(true) {
+        digitalWrite(4, HIGH);  // Turn LED on
+        delay(500);             // Wait 500ms
+        digitalWrite(4, LOW);   // Turn LED off
+        delay(500);             // Wait 500ms
+    }
 }
