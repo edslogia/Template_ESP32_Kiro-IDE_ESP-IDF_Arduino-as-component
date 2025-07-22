@@ -34,7 +34,21 @@ This is a base template for ESP-IDF projects that uses Arduino as a component, o
 2. Search for "ESP-IDF: Configure ESP-IDF Extension"
 3. Follow instructions to configure your ESP-IDF installation
 
-### 2. Select Target
+### 2. Generate compile_commands.json (Required for Kiro)
+
+When opening the project for the first time, Kiro will show the message:
+```
+compile_commands.json is missing. This may cause errors with code analysis extensions.
+```
+
+**Solution:** Click "Generate compile_commands.json" or run:
+```bash
+idf.py build
+```
+
+This will generate the file needed for code analysis.
+
+### 3. Select Target
 
 1. Open command palette
 2. Run "ESP-IDF: Set Espressif Device Target"
@@ -139,19 +153,12 @@ idf_component_register(SRCS "main.cpp"
 
 ## Troubleshooting
 
-### FreeRTOS Error
+### FreeRTOS Error (ALREADY FIXED)
 If you get the error:
 ```
 esp32-arduino requires CONFIG_FREERTOS_HZ=1000 (currently 100)
 ```
-**Solution:** Change in the `sdkconfig` file the line:
-```
-CONFIG_FREERTOS_HZ=100
-```
-To:
-```
-CONFIG_FREERTOS_HZ=1000
-```
+**Note:** This template already has the correct configuration (`CONFIG_FREERTOS_HZ=1000`) in the `sdkconfig` file. If you still see this error, verify that the `sdkconfig` file is present and contains the correct line.
 
 ### Build Error
 - Verify ESP-IDF is correctly installed

@@ -34,7 +34,23 @@ Esta es una plantilla base para proyectos ESP-IDF que utiliza Arduino como compo
 2. Busca "ESP-IDF: Configure ESP-IDF Extension"
 3. Sigue las instrucciones para configurar tu instalación de ESP-IDF
 
-### 2. Seleccionar Target
+### 2. Generar compile_commands.json (Requerido para Kiro)
+
+Al abrir el proyecto por primera vez, Kiro mostrará el mensaje:
+
+```
+compile_commands.json is missing. This may cause errors with code analysis extensions.
+```
+
+**Solución:** Haz clic en "Generate compile_commands.json" o ejecuta:
+
+```bash
+idf.py build
+```
+
+Esto generará el archivo necesario para el análisis de código.
+
+### 3. Seleccionar Target
 
 1. Abre la paleta de comandos
 2. Ejecuta "ESP-IDF: Set Espressif Device Target"
@@ -83,7 +99,7 @@ extern "C" void app_main()
 {
     initArduino();
     pinMode(2, OUTPUT);  // GPIO2 es el LED integrado
-    
+
     while(true) {
         digitalWrite(2, HIGH);  // Encender LED
         delay(500);             // Esperar 500ms
@@ -108,6 +124,7 @@ digitalWrite(TU_GPIO_AQUI, LOW);
 ### Agregar Más Funcionalidad
 
 Puedes usar todas las funciones de Arduino habituales:
+
 - `analogRead()`, `analogWrite()`
 - `Serial.begin()`, `Serial.print()`
 - `WiFi.begin()`, `WiFi.connect()`
@@ -122,6 +139,7 @@ idf.py menuconfig
 ```
 
 Esto abre un menú de configuración donde puedes:
+
 - Ajustar configuraciones de WiFi
 - Modificar configuraciones de memoria
 - Habilitar/deshabilitar componentes
@@ -139,31 +157,30 @@ idf_component_register(SRCS "main.cpp"
 
 ## Solución de Problemas
 
-### Error de FreeRTOS
+### Error de FreeRTOS (YA SOLUCIONADO)
+
 Si obtienes el error:
+
 ```
 esp32-arduino requires CONFIG_FREERTOS_HZ=1000 (currently 100)
 ```
-**Solución:** Cambia en el archivo `sdkconfig` la línea:
-```
-CONFIG_FREERTOS_HZ=100
-```
-Por:
-```
-CONFIG_FREERTOS_HZ=1000
-```
+
+**Nota:** Este template ya tiene la configuración correcta (`CONFIG_FREERTOS_HZ=1000`) en el archivo `sdkconfig`. Si aún ves este error, verifica que el archivo `sdkconfig` esté presente y contenga la línea correcta.
 
 ### Error de Compilación
+
 - Verifica que ESP-IDF esté correctamente instalado
 - Asegúrate de haber seleccionado el target correcto
 - Revisa que todas las dependencias estén instaladas
 
 ### Error de Flash
+
 - Verifica que la placa esté conectada correctamente
 - Asegúrate de que el puerto serie sea el correcto
 - Intenta presionar el botón BOOT mientras flasheas
 
 ### El LED No Parpadea
+
 - Verifica que estés usando el GPIO correcto para tu placa
 - Algunos ESP32 usan GPIO2, otros GPIO8 o GPIO10
 - Consulta la documentación de tu placa específica
