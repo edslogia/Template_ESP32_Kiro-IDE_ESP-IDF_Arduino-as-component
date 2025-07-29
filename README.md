@@ -160,6 +160,20 @@ idf_component_register(SRCS "main.cpp"
 
 ## Solución de Problemas
 
+### Error de Dependencia Arduino (YA SOLUCIONADO)
+
+Si obtienes errores de compilación relacionados con funciones de Arduino no encontradas, verifica que el archivo `main/CMakeLists.txt` contenga:
+
+```cmake
+idf_component_register(
+    SRCS "main.cpp"
+    INCLUDE_DIRS ""
+    REQUIRES arduino-esp32  # CRÍTICO: Requerido para funciones Arduino
+)
+```
+
+**Nota:** Este template ya incluye la configuración correcta. Si modificas el archivo, asegúrate de mantener la línea `REQUIRES arduino-esp32`.
+
 ### Error de FreeRTOS (YA SOLUCIONADO)
 
 Si obtienes el error:

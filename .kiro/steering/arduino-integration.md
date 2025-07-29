@@ -60,6 +60,12 @@ extern "C" void app_main() {
 
 ## Critical Requirements
 
+### Component Dependencies
+
+- **REQUIRES Declaration**: Main component must declare `arduino-esp32` dependency
+- **Location**: `main/CMakeLists.txt` - add `REQUIRES arduino-esp32`
+- **Why**: ESP-IDF needs explicit component dependencies for linking
+
 ### FreeRTOS Configuration
 
 - **Tick Rate**: Must be 1000Hz (`CONFIG_FREERTOS_HZ=1000`)
@@ -158,6 +164,7 @@ Serial.println("Traditional Arduino logging");
 
 - Call `initArduino()` before using Arduino functions in `app_main()`
 - Include `"Arduino.h"` in files using Arduino functions
+- **CRITICAL**: Add `REQUIRES arduino-esp32` to `main/CMakeLists.txt`
 - Ensure component dependencies are declared in `CMakeLists.txt`
 
 ### USB HID Classes (ESP32-S2/S3)

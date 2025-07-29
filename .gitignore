@@ -1,2 +1,34 @@
+# Build artifacts
 build/
 sdkconfig.old
+
+# Managed components (auto-downloaded by ESP-IDF Component Manager)
+managed_components/
+
+# IDE and editor files
+.vscode/settings.json
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ESP-IDF specific
+*.map
+*.elf
+*.bin
+compile_commands.json

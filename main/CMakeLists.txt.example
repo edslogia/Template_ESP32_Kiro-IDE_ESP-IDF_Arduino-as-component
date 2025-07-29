@@ -1,0 +1,13 @@
+# Example CMakeLists.txt for main component with Arduino integration
+# This file shows the correct configuration for ESP-IDF + Arduino projects
+
+idf_component_register(
+    SRCS "main.cpp"
+    INCLUDE_DIRS ""
+    REQUIRES arduino-esp32  # CRITICAL: Required for Arduino functions
+)
+
+# Additional notes:
+# - Use .cpp extension for files with Arduino functions
+# - Include "Arduino.h" in source files
+# - Call initArduino() before using Arduino functions in app_main()
