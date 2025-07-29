@@ -67,13 +67,57 @@ This will generate the file needed for code analysis.
 
 Or use Kiro command: `ESP-IDF: Build Project`
 
+**⚠️ Important:** If you get a Python environment error like:
+
+```
+'python.exe' is currently active while the project was configured with different version
+Run 'idf.py fullclean' to start again
+```
+
+**Solution:** Run a full clean first:
+
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
+```
+
+### Identify Serial Port
+
+Before flashing, identify the correct port for your ESP32:
+
+```powershell
+Get-PnpDevice -Class Ports -Status OK | Select-Object FriendlyName, InstanceId
+```
+
+Look for devices like:
+
+- `Silicon Labs CP210x USB to UART Bridge (COM5)`
+- `USB-SERIAL CH340 (COM3)`
+- `USB Serial Port (COM4)`
+
 ### Flash to Board
 
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 flash
 ```
 
-**Note:** Replace `COM5` with your serial port. Use `-b 115200` if you have flashing issues.
+**Note:** Replace `COM5` with your detected serial port.
+
+**⚠️ If flashing fails with boot mode error:**
+
+1. **First attempt:** Use slower speed:
+
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 -b 115200 flash
+   ```
+
+2. **If problem persists:** Use esptool directly:
+
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
+   ```
+
+3. **Manual method:** Hold the BOOT button on the board while running the flash command.
 
 Or use Kiro command: `ESP-IDF: Flash Device`
 
@@ -160,6 +204,20 @@ idf_component_register(SRCS "main.cpp"
 
 ## Troubleshooting
 
+### Arduino Dependency Error (ALREADY FIXED)
+
+If you get build errors related to Arduino functions not found, verify that the `main/CMakeLists.txt` file contains:
+
+```cmake
+idf_component_register(
+    SRCS "main.cpp"
+    INCLUDE_DIRS ""
+    REQUIRES arduino-esp32  # CRITICAL: Required for Arduino functions
+)
+```
+
+**Note:** This template already includes the correct configuration. If you modify the file, make sure to keep the `REQUIRES arduino-esp32` line.
+
 ### FreeRTOS Error (ALREADY FIXED)
 
 If you get the error:
@@ -170,17 +228,68 @@ esp32-arduino requires CONFIG_FREERTOS_HZ=1000 (currently 100)
 
 **Note:** This template already has the correct configuration (`CONFIG_FREERTOS_HZ=1000`) in the `sdkconfig` file. If you still see this error, verify that the `sdkconfig` file is present and contains the correct line.
 
+### Python Environment Error
+
+If you get an error like:
+
+```
+'python.exe' is currently active while the project was configured with different version
+Run 'idf.py fullclean' to start again
+```
+
+**Solution:** This is a common error when the ESP-IDF Python environment changes. Run:
+
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
+```
+
 ### Build Error
 
 - Verify ESP-IDF is correctly installed
 - Make sure you've selected the correct target
 - Check that all dependencies are installed
+- If you get Python environment errors, use the solution above
 
 ### Flash Error
 
+#### Error: "Wrong boot mode detected (0x13)"
+
+```
+A fatal error occurred: Failed to connect to ESP32: Wrong boot mode detected (0x13)!
+The chip needs to be in download mode.
+```
+
+**Solutions in order of priority:**
+
+1. **Use slower speed:**
+
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 -b 115200 flash
+   ```
+
+2. **Use esptool directly:**
+
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
+   ```
+
+3. **Manual method:** Hold the BOOT button while running the flash command.
+
+#### Error: "The chip stopped responding"
+
+If the chip connects but stops during flash configuration:
+
+- Use esptool directly (command from point 2 above)
+- Check USB cable quality (must support data, not just charging)
+- Try a different USB cable
+
+#### Error: "Could not open COM port"
+
 - Verify the board is connected correctly
-- Make sure the serial port is correct
-- Try pressing the BOOT button while flashing
+- Make sure the serial port is correct using: `Get-PnpDevice -Class Ports -Status OK`
+- Close other programs that might be using the port (Arduino IDE, PuTTY, etc.)
+- Disconnect and reconnect the USB cable
 
 ### LED Not Blinking
 

@@ -52,6 +52,8 @@ Run 'idf.py fullclean' to start again
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
+**Nota:** Este es un error común que ocurre cuando se cambia la versión de Python del entorno ESP-IDF. La limpieza completa resuelve el problema regenerando todos los archivos de configuración.
+
 ## Errores de Configuración
 
 ### 4. Error: FreeRTOS tick rate
@@ -81,12 +83,31 @@ Navegar a: Component config → FreeRTOS → Tick rate (Hz) → 1000
 ```
 Failed to connect to ESP32: Timed out waiting for packet header
 ```
+O:
+```
+A fatal error occurred: Failed to connect to ESP32: Wrong boot mode detected (0x13)!
+The chip needs to be in download mode.
+```
 
-**Soluciones:**
-1. Verificar puerto COM correcto
-2. Presionar botón BOOT mientras flashea
-3. Usar velocidad más lenta: `-b 115200`
-4. Verificar cable USB (debe soportar datos, no solo carga)
+**Soluciones en orden de prioridad:**
+1. **Identificar puerto correcto:**
+   ```powershell
+   Get-PnpDevice -Class Ports -Status OK | Select-Object FriendlyName, InstanceId
+   ```
+   Buscar: `Silicon Labs CP210x USB to UART Bridge (COM5)`
+
+2. **Usar velocidad más lenta:**
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 -b 115200 flash
+   ```
+
+3. **Usar esptool directamente (MÁS CONFIABLE):**
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
+   ```
+
+4. **Método manual:** Presionar botón BOOT mientras flashea
+5. **Verificar cable USB** (debe soportar datos, no solo carga)
 
 ### 6. Error: Permission denied on COM port
 
@@ -94,15 +115,35 @@ Failed to connect to ESP32: Timed out waiting for packet header
 ```
 could not open port 'COM5': PermissionError
 ```
+O:
+```
+could not open port '\\\\.\\COM5': PermissionError(13, 'Acceso denegado.', None, 5)
+```
 
 **Soluciones:**
 1. Cerrar otros programas que usen el puerto (Arduino IDE, PuTTY, etc.)
 2. Desconectar y reconectar el cable USB
 3. Verificar drivers del dispositivo
+4. Esperar unos segundos después del flasheo antes de abrir el monitor
+5. Reiniciar Kiro IDE si el problema persiste
+
+### 7. Error: The chip stopped responding
+
+**Síntomas:**
+```
+A fatal error occurred: The chip stopped responding.
+```
+
+**Causa:** Problema de comunicación durante la configuración del flash con `idf.py flash`
+
+**Solución:** Usar esptool directamente (más estable):
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
+```
 
 ## Errores de Kiro IDE
 
-### 7. Error: compile_commands.json missing
+### 8. Error: compile_commands.json missing
 
 **Síntomas:**
 ```
@@ -114,7 +155,7 @@ compile_commands.json is missing. This may cause errors with code analysis
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
-### 8. Error: IntelliSense not working
+### 9. Error: IntelliSense not working
 
 **Síntomas:**
 - Funciones Arduino aparecen como no definidas
@@ -124,6 +165,38 @@ compile_commands.json is missing. This may cause errors with code analysis
 1. Generar compile_commands.json (ver error #7)
 2. Reiniciar Kiro IDE
 3. Verificar configuración ESP-IDF extension
+
+## Flujo de Trabajo Recomendado
+
+### Proceso de Compilación y Flasheo (Probado)
+
+1. **Identificar puerto ESP32:**
+   ```powershell
+   Get-PnpDevice -Class Ports -Status OK | Select-Object FriendlyName, InstanceId
+   ```
+
+2. **Compilar proyecto:**
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
+   ```
+   
+   Si hay error de entorno Python, limpiar primero:
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
+   ```
+
+3. **Flashear (método más confiable):**
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
+   ```
+
+4. **Monitor serial (opcional):**
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 monitor
+   ```
+
+**Nota:** Reemplazar `COM5` con el puerto detectado en el paso 1.
 
 ## Prevención de Problemas
 

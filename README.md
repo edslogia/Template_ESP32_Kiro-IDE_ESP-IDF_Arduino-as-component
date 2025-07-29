@@ -67,13 +67,52 @@ Esto generará el archivo necesario para el análisis de código.
 
 O usa el comando de Kiro: `ESP-IDF: Build Project`
 
+**⚠️ Importante:** Si obtienes un error de entorno Python como:
+```
+'python.exe' is currently active while the project was configured with different version
+Run 'idf.py fullclean' to start again
+```
+
+**Solución:** Ejecuta primero una limpieza completa:
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
+```
+
+### Identificar Puerto Serial
+
+Antes de flashear, identifica el puerto correcto de tu ESP32:
+
+```powershell
+Get-PnpDevice -Class Ports -Status OK | Select-Object FriendlyName, InstanceId
+```
+
+Busca dispositivos como:
+- `Silicon Labs CP210x USB to UART Bridge (COM5)`
+- `USB-SERIAL CH340 (COM3)`
+- `USB Serial Port (COM4)`
+
 ### Flashear a la Placa
 
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 flash
 ```
 
-**Nota:** Reemplaza `COM5` con tu puerto serial. Usa `-b 115200` si tienes problemas de flasheo.
+**Nota:** Reemplaza `COM5` con tu puerto serial detectado.
+
+**⚠️ Si falla el flasheo con error de modo de arranque:**
+
+1. **Primer intento:** Usa velocidad más lenta:
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 -b 115200 flash
+   ```
+
+2. **Si persiste el problema:** Usa esptool directamente:
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
+   ```
+
+3. **Método manual:** Mantén presionado el botón BOOT de la placa mientras ejecutas el comando de flasheo.
 
 O usa el comando de Kiro: `ESP-IDF: Flash Device`
 
@@ -192,9 +231,37 @@ esp32-arduino requires CONFIG_FREERTOS_HZ=1000 (currently 100)
 
 ### Error de Flash
 
+#### Error: "Wrong boot mode detected (0x13)"
+```
+A fatal error occurred: Failed to connect to ESP32: Wrong boot mode detected (0x13)! 
+The chip needs to be in download mode.
+```
+
+**Soluciones en orden de prioridad:**
+
+1. **Usar velocidad más lenta:**
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 -b 115200 flash
+   ```
+
+2. **Usar esptool directamente:**
+   ```powershell
+   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
+   ```
+
+3. **Método manual:** Mantén presionado el botón BOOT mientras ejecutas el flasheo.
+
+#### Error: "The chip stopped responding"
+Si el chip se conecta pero se detiene durante la configuración del flash:
+- Usa esptool directamente (comando del punto 2 anterior)
+- Verifica la calidad del cable USB (debe soportar datos, no solo carga)
+- Intenta con un cable USB diferente
+
+#### Error: "Could not open COM port"
 - Verifica que la placa esté conectada correctamente
-- Asegúrate de que el puerto serie sea el correcto
-- Intenta presionar el botón BOOT mientras flasheas
+- Asegúrate de que el puerto serie sea el correcto usando: `Get-PnpDevice -Class Ports -Status OK`
+- Cierra otros programas que puedan estar usando el puerto (Arduino IDE, PuTTY, etc.)
+- Desconecta y reconecta el cable USB
 
 ### El LED No Parpadea
 
