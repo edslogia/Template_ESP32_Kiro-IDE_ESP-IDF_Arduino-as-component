@@ -21,3 +21,22 @@ This is an ESP-IDF template project that integrates Arduino as a component, desi
 - Learning ESP32 development
 - Projects requiring both Arduino simplicity and ESP-IDF power
 - Educational and hobbyist projects
+
+## Quick Start
+
+### Build the Project
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
+```
+
+### Flash to ESP32
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 flash
+```
+
+### Monitor Serial Output
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 monitor
+```
+
+**Note**: Replace `COM5` with your actual serial port. Use `-b 115200` if you encounter flashing issues.

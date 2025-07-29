@@ -55,3 +55,34 @@ This project follows ESP-IDF component architecture:
 1. Create new directory with `CMakeLists.txt`
 2. Register component in root `CMakeLists.txt` if needed
 3. Add dependencies in `idf_component.yml` if external libraries required
+
+## Development Commands
+
+All ESP-IDF commands require environment setup first:
+
+### Build Project
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
+```
+
+### Flash to Device
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 flash
+```
+
+### Monitor Serial Output
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 monitor
+```
+
+### Configuration Menu
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py menuconfig
+```
+
+### Set Target Device
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py set-target esp32
+```
+
+**Important**: Replace `COM5` with your actual serial port. Use `-b 115200` for slower but more reliable flashing.

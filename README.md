@@ -22,9 +22,10 @@ Esta es una plantilla base para proyectos ESP-IDF que utiliza Arduino como compo
 
 ## Requisitos Previos
 
-1. **ESP-IDF**: Versión 4.4 o superior
+1. **ESP-IDF**: Versión 5.4.2 instalada en `%USERPROFILE%\esp\v5.4.2\esp-idf\`
 2. **Extensión ESP-IDF**: Instalada en Kiro IDE
 3. **Hardware**: Cualquier placa ESP32 compatible
+4. **Sistema Operativo**: Windows con PowerShell
 
 ## Configuración Inicial
 
@@ -44,8 +45,8 @@ compile_commands.json is missing. This may cause errors with code analysis exten
 
 **Solución:** Haz clic en "Generate compile_commands.json" o ejecuta:
 
-```bash
-idf.py build
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
 Esto generará el archivo necesario para el análisis de código.
@@ -60,32 +61,34 @@ Esto generará el archivo necesario para el análisis de código.
 
 ### Compilar el Proyecto
 
-```bash
-idf.py build
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
 O usa el comando de Kiro: `ESP-IDF: Build Project`
 
 ### Flashear a la Placa
 
-```bash
-idf.py flash
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 flash
 ```
+
+**Nota:** Reemplaza `COM5` con tu puerto serial. Usa `-b 115200` si tienes problemas de flasheo.
 
 O usa el comando de Kiro: `ESP-IDF: Flash Device`
 
 ### Monitor Serial
 
-```bash
-idf.py monitor
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 monitor
 ```
 
 O usa el comando de Kiro: `ESP-IDF: Monitor Device`
 
 ### Todo en Uno
 
-```bash
-idf.py build flash monitor
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 build flash monitor
 ```
 
 ## Código de Ejemplo
@@ -134,8 +137,8 @@ Puedes usar todas las funciones de Arduino habituales:
 
 ### Modificar Configuración del SDK
 
-```bash
-idf.py menuconfig
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py menuconfig
 ```
 
 Esto abre un menú de configuración donde puedes:

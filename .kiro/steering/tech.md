@@ -13,8 +13,20 @@
 
 ## Development Environment
 - **IDE**: Kiro IDE with ESP-IDF extension
+- **ESP-IDF Version**: v5.4.2 (installed at `%USERPROFILE%\esp\v5.4.2\esp-idf\`)
 - **Container**: Docker-based development environment using `espressif/idf` image
 - **Language**: C++ (main.cpp uses Arduino-style syntax)
+- **Platform**: Windows with PowerShell
+
+### Environment Setup
+Before running any ESP-IDF commands, the environment must be activated:
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"
+```
+This script sets up:
+- IDF_PATH environment variable
+- Python dependencies
+- Tool paths (compiler, flasher, etc.)
 
 ## Key Configuration
 - **FreeRTOS Tick Rate**: 1000Hz (required for Arduino compatibility)
@@ -24,19 +36,21 @@
 ## Common Commands
 
 ### Build & Flash
-```bash
-# Build project
-idf.py build
+```powershell
+# Build project (Windows - ESP-IDF environment setup required)
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 
 # Flash to device
-idf.py flash
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py flash
 
 # Monitor serial output
-idf.py monitor
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py monitor
 
 # All-in-one command
-idf.py build flash monitor
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build flash monitor
 ```
+
+**Note**: The ESP-IDF environment must be activated before running any `idf.py` commands. The `export.ps1` script sets up the necessary environment variables and tool paths.
 
 ### Configuration
 ```bash

@@ -22,9 +22,10 @@ This is a base template for ESP-IDF projects that uses Arduino as a component, o
 
 ## Prerequisites
 
-1. **ESP-IDF**: Version 4.4 or higher
+1. **ESP-IDF**: Version 5.4.2 installed at `%USERPROFILE%\esp\v5.4.2\esp-idf\`
 2. **ESP-IDF Extension**: Installed in Kiro IDE
 3. **Hardware**: Any compatible ESP32 board
+4. **Operating System**: Windows with PowerShell
 
 ## Initial Setup
 
@@ -37,13 +38,15 @@ This is a base template for ESP-IDF projects that uses Arduino as a component, o
 ### 2. Generate compile_commands.json (Required for Kiro)
 
 When opening the project for the first time, Kiro will show the message:
+
 ```
 compile_commands.json is missing. This may cause errors with code analysis extensions.
 ```
 
 **Solution:** Click "Generate compile_commands.json" or run:
-```bash
-idf.py build
+
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
 This will generate the file needed for code analysis.
@@ -58,32 +61,34 @@ This will generate the file needed for code analysis.
 
 ### Build Project
 
-```bash
-idf.py build
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
 Or use Kiro command: `ESP-IDF: Build Project`
 
 ### Flash to Board
 
-```bash
-idf.py flash
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 flash
 ```
+
+**Note:** Replace `COM5` with your serial port. Use `-b 115200` if you have flashing issues.
 
 Or use Kiro command: `ESP-IDF: Flash Device`
 
 ### Serial Monitor
 
-```bash
-idf.py monitor
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 monitor
 ```
 
 Or use Kiro command: `ESP-IDF: Monitor Device`
 
 ### All in One
 
-```bash
-idf.py build flash monitor
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 build flash monitor
 ```
 
 ## Example Code
@@ -97,7 +102,7 @@ extern "C" void app_main()
 {
     initArduino();
     pinMode(2, OUTPUT);  // GPIO2 is the built-in LED
-    
+
     while(true) {
         digitalWrite(2, HIGH);  // Turn LED on
         delay(500);             // Wait 500ms
@@ -122,6 +127,7 @@ digitalWrite(YOUR_GPIO_HERE, LOW);
 ### Add More Functionality
 
 You can use all the usual Arduino functions:
+
 - `analogRead()`, `analogWrite()`
 - `Serial.begin()`, `Serial.print()`
 - `WiFi.begin()`, `WiFi.connect()`
@@ -131,11 +137,12 @@ You can use all the usual Arduino functions:
 
 ### Modify SDK Configuration
 
-```bash
-idf.py menuconfig
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py menuconfig
 ```
 
 This opens a configuration menu where you can:
+
 - Adjust WiFi settings
 - Modify memory configurations
 - Enable/disable components
@@ -154,23 +161,29 @@ idf_component_register(SRCS "main.cpp"
 ## Troubleshooting
 
 ### FreeRTOS Error (ALREADY FIXED)
+
 If you get the error:
+
 ```
 esp32-arduino requires CONFIG_FREERTOS_HZ=1000 (currently 100)
 ```
+
 **Note:** This template already has the correct configuration (`CONFIG_FREERTOS_HZ=1000`) in the `sdkconfig` file. If you still see this error, verify that the `sdkconfig` file is present and contains the correct line.
 
 ### Build Error
+
 - Verify ESP-IDF is correctly installed
 - Make sure you've selected the correct target
 - Check that all dependencies are installed
 
 ### Flash Error
+
 - Verify the board is connected correctly
 - Make sure the serial port is correct
 - Try pressing the BOOT button while flashing
 
 ### LED Not Blinking
+
 - Verify you're using the correct GPIO for your board
 - Some ESP32 use GPIO2, others GPIO8 or GPIO10
 - Check your specific board documentation
