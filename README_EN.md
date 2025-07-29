@@ -12,12 +12,30 @@ This is a base template for ESP-IDF projects that uses Arduino as a component, o
 ## Project Structure
 
 ```
-├── main/
-│   ├── main.cpp          # Main application code
-│   └── CMakeLists.txt    # Build configuration for main
-├── CMakeLists.txt        # Main project configuration
-├── sdkconfig             # SDK configuration (auto-generated)
-└── README.md            # This file
+├── main/                    # Main application component
+│   ├── main.cpp            # Main code (LED blink example)
+│   ├── CMakeLists.txt      # Build configuration with Arduino dependency
+│   ├── CMakeLists.txt.example # Configuration example
+│   └── idf_component.yml   # Component dependencies
+├── managed_components/      # Auto-managed components (26 total)
+│   ├── espressif__arduino-esp32/    # Arduino ESP32 core v3.2.1
+│   ├── espressif__esp-dsp/          # Digital Signal Processing
+│   ├── espressif__esp-modbus/       # Modbus protocol support
+│   ├── espressif__esp_rainmaker/    # ESP RainMaker IoT platform
+│   └── ... (22 more components)     # Additional ESP-IDF components
+├── build/                  # Build artifacts (auto-generated)
+│   ├── ESP32_PLC-in-DC_Kiro.bin   # Main application binary
+│   ├── bootloader/bootloader.bin   # Bootloader binary
+│   └── compile_commands.json       # Code analysis support
+├── .devcontainer/          # Docker development environment
+├── .kiro/                  # Kiro IDE configuration and steering
+│   └── steering/          # Project documentation and guides
+├── .vscode/               # Kiro IDE configuration
+├── CMakeLists.txt         # Main project configuration
+├── sdkconfig              # ESP-IDF configuration (FreeRTOS 1000Hz)
+├── dependencies.lock      # Component manager dependency lock
+├── README.md             # Project documentation (Spanish)
+└── README_EN.md          # This file (English)
 ```
 
 ## Prerequisites

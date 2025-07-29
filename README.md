@@ -12,12 +12,30 @@ Esta es una plantilla base para proyectos ESP-IDF que utiliza Arduino como compo
 ## Estructura del Proyecto
 
 ```
-├── main/
-│   ├── main.cpp          # Código principal de la aplicación
-│   └── CMakeLists.txt    # Configuración de compilación para main
-├── CMakeLists.txt        # Configuración principal del proyecto
-├── sdkconfig             # Configuración del SDK (generado automáticamente)
-└── README.md            # Este archivo
+├── main/                    # Componente principal de la aplicación
+│   ├── main.cpp            # Código principal (ejemplo LED parpadeante)
+│   ├── CMakeLists.txt      # Configuración de compilación con dependencia Arduino
+│   ├── CMakeLists.txt.example # Ejemplo de configuración
+│   └── idf_component.yml   # Dependencias del componente
+├── managed_components/      # Componentes gestionados automáticamente (26 total)
+│   ├── espressif__arduino-esp32/    # Arduino ESP32 core v3.2.1
+│   ├── espressif__esp-dsp/          # Procesamiento de señales digitales
+│   ├── espressif__esp-modbus/       # Soporte protocolo Modbus
+│   ├── espressif__esp_rainmaker/    # Plataforma IoT ESP RainMaker
+│   └── ... (22 componentes más)     # Componentes adicionales ESP-IDF
+├── build/                  # Artefactos de compilación (generados automáticamente)
+│   ├── ESP32_PLC-in-DC_Kiro.bin   # Binario principal de la aplicación
+│   ├── bootloader/bootloader.bin   # Binario del bootloader
+│   └── compile_commands.json       # Soporte para análisis de código
+├── .devcontainer/          # Entorno de desarrollo Docker
+├── .kiro/                  # Configuración y reglas de Kiro IDE
+│   └── steering/          # Documentación y guías del proyecto
+├── .vscode/               # Configuración de Kiro IDE
+├── CMakeLists.txt         # Configuración principal del proyecto
+├── sdkconfig              # Configuración ESP-IDF (FreeRTOS 1000Hz)
+├── dependencies.lock      # Bloqueo de dependencias del gestor de componentes
+├── README.md             # Este archivo (Español)
+└── README_EN.md          # Documentación en Inglés
 ```
 
 ## Requisitos Previos
