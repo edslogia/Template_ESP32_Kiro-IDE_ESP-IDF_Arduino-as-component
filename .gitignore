@@ -1,8 +1,6 @@
 # Build artifacts
 build/
 sdkconfig.old
-
-# Managed components (auto-downloaded by ESP-IDF Component Manager)
 managed_components/
 
 # IDE and editor files
