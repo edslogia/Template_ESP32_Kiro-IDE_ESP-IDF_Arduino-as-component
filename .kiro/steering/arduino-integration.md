@@ -6,9 +6,7 @@ This project uses Arduino as an ESP-IDF component, providing the full flexibilit
 
 ## Version Compatibility
 
-- **Arduino Core ESP32**: v3.2.1+
-- **ESP-IDF**: v5.4+
-- **Component**: `espressif/arduino-esp32`
+See `tech.md` for current versions and environment setup.
 
 ## Two Implementation Approaches
 
@@ -121,14 +119,9 @@ dependencies:
 
 ## Configuration Menu Options
 
-Access via ESP-IDF environment setup and menuconfig:
-
-```powershell
-& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py menuconfig
-```
+Access via `idf.py menuconfig` (see `tech.md` for command setup).
 
 Navigate to: Arduino Configuration
-
 - **Autostart Arduino**: Enable/disable automatic setup/loop
 - **Core Debug Level**: Set Arduino logging level
 - **Event Task**: Configure Arduino event handling

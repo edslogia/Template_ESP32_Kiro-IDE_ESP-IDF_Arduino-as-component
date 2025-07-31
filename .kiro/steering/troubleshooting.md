@@ -34,13 +34,7 @@ ERROR: Some components in the "managed_components" directory were modified
 Hash of the file "CMakeLists.txt" does not match expected hash
 ```
 
-**Solution:**
-
-```powershell
-Remove-Item -Recurse -Force managed_components
-Remove-Item -Recurse -Force build
-& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
-```
+**Solution:** See `commands.md` for clean managed components command.
 
 ### 3. Error: Python environment mismatch
 
@@ -51,12 +45,7 @@ Remove-Item -Recurse -Force build
 Run 'idf.py fullclean' to start again
 ```
 
-**Solution:**
-
-```powershell
-& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
-& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
-```
+**Solution:** See `commands.md` for clean build command.
 
 **Note:** This is a common error that occurs when the ESP-IDF Python environment version changes. A full clean resolves the issue by regenerating all configuration files.
 
@@ -77,11 +66,7 @@ Verify that `sdkconfig` contains:
 CONFIG_FREERTOS_HZ=1000
 ```
 
-If it doesn't exist, run:
-
-```powershell
-& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py menuconfig
-```
+If it doesn't exist, run `idf.py menuconfig` (see `commands.md`).
 
 Navigate to: Component config → FreeRTOS → Tick rate (Hz) → 1000
 
@@ -104,25 +89,9 @@ The chip needs to be in download mode.
 
 **Solutions in order of priority:**
 
-1. **Identify correct port:**
-
-   ```powershell
-   Get-PnpDevice -Class Ports -Status OK | Select-Object FriendlyName, InstanceId
-   ```
-
-   Look for: `Silicon Labs CP210x USB to UART Bridge (COM5)`
-
-2. **Use slower speed:**
-
-   ```powershell
-   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 -b 115200 flash
-   ```
-
-3. **Use esptool directly (MORE RELIABLE):**
-
-   ```powershell
-   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
-   ```
+1. **Identify correct port:** See `commands.md` for port detection
+2. **Use slower speed:** See `commands.md` for slower flash command
+3. **Use esptool directly (MORE RELIABLE):** See `commands.md` for direct esptool command
 
 4. **Manual method:** Press BOOT button while flashing
 5. **Check USB cable** (must support data, not just charging)
@@ -159,11 +128,7 @@ A fatal error occurred: The chip stopped responding.
 
 **Cause:** Communication problem during flash configuration with `idf.py flash`
 
-**Solution:** Use esptool directly (more stable):
-
-```powershell
-& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
-```
+**Solution:** Use direct esptool command from `commands.md` (more stable).
 
 ## Kiro IDE Errors
 
@@ -175,11 +140,7 @@ A fatal error occurred: The chip stopped responding.
 compile_commands.json is missing. This may cause errors with code analysis
 ```
 
-**Solution:**
-
-```powershell
-& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
-```
+**Solution:** Run build command from `commands.md`.
 
 ### 9. Error: IntelliSense not working
 
@@ -198,37 +159,12 @@ compile_commands.json is missing. This may cause errors with code analysis
 
 ### Build and Flash Process (Tested)
 
-1. **Identify ESP32 port:**
+See `commands.md` for complete workflow. Key steps:
 
-   ```powershell
-   Get-PnpDevice -Class Ports -Status OK | Select-Object FriendlyName, InstanceId
-   ```
-
-2. **Build project:**
-
-   ```powershell
-   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
-   ```
-
-   If there's a Python environment error, clean first:
-
-   ```powershell
-   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
-   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
-   ```
-
-3. **Flash (most reliable method):**
-
-   ```powershell
-   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
-   ```
-
-4. **Serial monitor (optional):**
-   ```powershell
-   & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 monitor
-   ```
-
-**Note:** Replace `COM5` with the port detected in step 1.
+1. Detect port with `Get-PnpDevice`
+2. Build with `idf.py build`
+3. Flash with `idf.py flash` or direct esptool
+4. Monitor with `idf.py monitor`
 
 ## Problem Prevention
 
@@ -246,14 +182,7 @@ compile_commands.json is missing. This may cause errors with code analysis
 
 ### Safe cleanup commands:
 
-```powershell
-# Full build clean
-& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
-
-# Clean only managed components
-Remove-Item -Recurse -Force managed_components
-Remove-Item -Recurse -Force build
-```
+See `commands.md` for clean build and managed components commands.
 
 ### Recommended .gitignore:
 

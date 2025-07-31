@@ -28,6 +28,9 @@
 ├── .kiro/                  # Kiro IDE configuration and steering
 │   └── steering/          # Steering rules and documentation
 │       ├── arduino-integration.md  # Arduino integration guide
+│       ├── commands.md    # Command reference
+│       ├── cpp-best-practices.md  # C++ coding standards
+│       ├── personalization.md     # User personalization preferences
 │       ├── product.md     # Product overview
 │       ├── structure.md   # This file - project structure
 │       ├── tech.md        # Technology stack information
