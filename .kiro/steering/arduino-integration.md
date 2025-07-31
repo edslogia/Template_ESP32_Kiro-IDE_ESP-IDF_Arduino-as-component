@@ -32,8 +32,6 @@ void loop() {
 }
 ```
 
-**Configuration**: Enable "Autostart Arduino setup and loop on boot" in menuconfig
-
 ### Option 2: ESP-IDF style (app_main) - CURRENT PROJECT
 
 Manual Arduino initialization with full ESP-IDF control:
@@ -55,8 +53,6 @@ extern "C" void app_main() {
     // WARNING: Function must not end or MCU will restart
 }
 ```
-
-**Configuration**: Disable "Autostart Arduino setup and loop on boot" in menuconfig
 
 ## Critical Requirements
 
@@ -154,12 +150,6 @@ Serial.println("Traditional Arduino logging");
 
 ## Common Issues & Solutions
 
-### Compilation Errors
-
-- Ensure file extensions are `.cpp` for Arduino code
-- Check ESP-IDF and Arduino component version compatibility
-- Verify FreeRTOS tick rate is 1000Hz
-
 ### Missing Functions
 
 - Call `initArduino()` before using Arduino functions in `app_main()`
@@ -189,4 +179,3 @@ set(EXTRA_COMPONENT_DIRS path/to/esp32-arduino-lib-builder/components/arduino_ti
 3. **Declare Arduino dependency** in component `CMakeLists.txt`
 4. **Check version compatibility** when updating components
 5. **Use `.cpp` extensions** for Arduino-compatible code
-6. **Configure FreeRTOS tick rate** to 1000Hz for timing accuracy

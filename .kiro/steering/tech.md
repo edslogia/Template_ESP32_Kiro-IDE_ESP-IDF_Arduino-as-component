@@ -18,7 +18,13 @@
 - **Language**: C++ (main.cpp uses Arduino-style syntax)
 - **Platform**: Windows with PowerShell
 
-### Environment Setup
+## Key Configuration
+- **FreeRTOS Tick Rate**: 1000Hz (required for Arduino compatibility)
+- **Entry Point**: `app_main()` function with `extern "C"` linkage
+- **Arduino Initialization**: `initArduino()` must be called before using Arduino functions
+
+## Common Commands
+
 Before running any ESP-IDF commands, the environment must be activated:
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"
@@ -27,13 +33,6 @@ This script sets up:
 - IDF_PATH environment variable
 - Python dependencies
 - Tool paths (compiler, flasher, etc.)
-
-## Key Configuration
-- **FreeRTOS Tick Rate**: 1000Hz (required for Arduino compatibility)
-- **Entry Point**: `app_main()` function with `extern "C"` linkage
-- **Arduino Initialization**: `initArduino()` must be called before using Arduino functions
-
-## Common Commands
 
 ### Build & Flash
 ```powershell
@@ -67,10 +66,3 @@ idf.py set-target esp32
 # Generate compile_commands.json for code analysis
 idf.py build
 ```
-
-## Kiro IDE Commands
-- **Build**: `ESP-IDF: Build Project`
-- **Flash**: `ESP-IDF: Flash Device`
-- **Monitor**: `ESP-IDF: Monitor Device`
-- **Configure**: `ESP-IDF: Configure ESP-IDF Extension`
-- **Set Target**: `ESP-IDF: Set Espressif Device Target`

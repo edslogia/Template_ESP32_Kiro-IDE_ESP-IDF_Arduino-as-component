@@ -1,20 +1,22 @@
-# Solución de Problemas Comunes - ESP-IDF + Arduino
+# Common Troubleshooting - ESP-IDF + Arduino
 
-## Errores de Compilación
+## Compilation Errors
 
 ### 1. Error: Arduino functions not found
 
-**Síntomas:**
+**Symptoms:**
+
 ```
 undefined reference to `pinMode'
 undefined reference to `digitalWrite'
 undefined reference to `initArduino'
 ```
 
-**Causa:** Falta la dependencia de Arduino en CMakeLists.txt
+**Cause:** Missing Arduino dependency in CMakeLists.txt
 
-**Solución:**
-Verificar que `main/CMakeLists.txt` contenga:
+**Solution:**
+Verify that `main/CMakeLists.txt` contains:
+
 ```cmake
 idf_component_register(
     SRCS "main.cpp"
@@ -25,13 +27,15 @@ idf_component_register(
 
 ### 2. Error: managed_components hash mismatch
 
-**Síntomas:**
+**Symptoms:**
+
 ```
 ERROR: Some components in the "managed_components" directory were modified
 Hash of the file "CMakeLists.txt" does not match expected hash
 ```
 
-**Solución:**
+**Solution:**
+
 ```powershell
 Remove-Item -Recurse -Force managed_components
 Remove-Item -Recurse -Force build
@@ -40,187 +44,219 @@ Remove-Item -Recurse -Force build
 
 ### 3. Error: Python environment mismatch
 
-**Síntomas:**
+**Symptoms:**
+
 ```
 'python.exe' is currently active while the project was configured with different version
 Run 'idf.py fullclean' to start again
 ```
 
-**Solución:**
+**Solution:**
+
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
-**Nota:** Este es un error común que ocurre cuando se cambia la versión de Python del entorno ESP-IDF. La limpieza completa resuelve el problema regenerando todos los archivos de configuración.
+**Note:** This is a common error that occurs when the ESP-IDF Python environment version changes. A full clean resolves the issue by regenerating all configuration files.
 
-## Errores de Configuración
+## Configuration Errors
 
 ### 4. Error: FreeRTOS tick rate
 
-**Síntomas:**
+**Symptoms:**
+
 ```
 esp32-arduino requires CONFIG_FREERTOS_HZ=1000 (currently 100)
 ```
 
-**Solución:**
-Verificar que `sdkconfig` contenga:
+**Solution:**
+Verify that `sdkconfig` contains:
+
 ```
 CONFIG_FREERTOS_HZ=1000
 ```
 
-Si no existe, ejecutar:
+If it doesn't exist, run:
+
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py menuconfig
 ```
-Navegar a: Component config → FreeRTOS → Tick rate (Hz) → 1000
 
-## Errores de Flash
+Navigate to: Component config → FreeRTOS → Tick rate (Hz) → 1000
+
+## Flash Errors
 
 ### 5. Error: Failed to connect to ESP32
 
-**Síntomas:**
+**Symptoms:**
+
 ```
 Failed to connect to ESP32: Timed out waiting for packet header
 ```
-O:
+
+Or:
+
 ```
 A fatal error occurred: Failed to connect to ESP32: Wrong boot mode detected (0x13)!
 The chip needs to be in download mode.
 ```
 
-**Soluciones en orden de prioridad:**
-1. **Identificar puerto correcto:**
+**Solutions in order of priority:**
+
+1. **Identify correct port:**
+
    ```powershell
    Get-PnpDevice -Class Ports -Status OK | Select-Object FriendlyName, InstanceId
    ```
-   Buscar: `Silicon Labs CP210x USB to UART Bridge (COM5)`
 
-2. **Usar velocidad más lenta:**
+   Look for: `Silicon Labs CP210x USB to UART Bridge (COM5)`
+
+2. **Use slower speed:**
+
    ```powershell
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 -b 115200 flash
    ```
 
-3. **Usar esptool directamente (MÁS CONFIABLE):**
+3. **Use esptool directly (MORE RELIABLE):**
+
    ```powershell
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
    ```
 
-4. **Método manual:** Presionar botón BOOT mientras flashea
-5. **Verificar cable USB** (debe soportar datos, no solo carga)
+4. **Manual method:** Press BOOT button while flashing
+5. **Check USB cable** (must support data, not just charging)
 
 ### 6. Error: Permission denied on COM port
 
-**Síntomas:**
+**Symptoms:**
+
 ```
 could not open port 'COM5': PermissionError
 ```
-O:
+
+Or:
+
 ```
-could not open port '\\\\.\\COM5': PermissionError(13, 'Acceso denegado.', None, 5)
+could not open port '\\\\.\\COM5': PermissionError(13, 'Access denied.', None, 5)
 ```
 
-**Soluciones:**
-1. Cerrar otros programas que usen el puerto (Arduino IDE, PuTTY, etc.)
-2. Desconectar y reconectar el cable USB
-3. Verificar drivers del dispositivo
-4. Esperar unos segundos después del flasheo antes de abrir el monitor
-5. Reiniciar Kiro IDE si el problema persiste
+**Solutions:**
+
+1. Close other programs using the port (Arduino IDE, PuTTY, etc.)
+2. Disconnect and reconnect the USB cable
+3. Check device drivers
+4. Wait a few seconds after flashing before opening the monitor
+5. Restart Kiro IDE if the problem persists
 
 ### 7. Error: The chip stopped responding
 
-**Síntomas:**
+**Symptoms:**
+
 ```
 A fatal error occurred: The chip stopped responding.
 ```
 
-**Causa:** Problema de comunicación durante la configuración del flash con `idf.py flash`
+**Cause:** Communication problem during flash configuration with `idf.py flash`
 
-**Solución:** Usar esptool directamente (más estable):
+**Solution:** Use esptool directly (more stable):
+
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
 ```
 
-## Errores de Kiro IDE
+## Kiro IDE Errors
 
 ### 8. Error: compile_commands.json missing
 
-**Síntomas:**
+**Symptoms:**
+
 ```
 compile_commands.json is missing. This may cause errors with code analysis
 ```
 
-**Solución:**
+**Solution:**
+
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
 ### 9. Error: IntelliSense not working
 
-**Síntomas:**
-- Funciones Arduino aparecen como no definidas
-- Autocompletado no funciona
+**Symptoms:**
 
-**Soluciones:**
-1. Generar compile_commands.json (ver error #7)
-2. Reiniciar Kiro IDE
-3. Verificar configuración ESP-IDF extension
+- Arduino functions appear as undefined
+- Autocompletion doesn't work
 
-## Flujo de Trabajo Recomendado
+**Solutions:**
 
-### Proceso de Compilación y Flasheo (Probado)
+1. Generate compile_commands.json (see error #8)
+2. Restart Kiro IDE
+3. Check ESP-IDF extension configuration
 
-1. **Identificar puerto ESP32:**
+## Recommended Workflow
+
+### Build and Flash Process (Tested)
+
+1. **Identify ESP32 port:**
+
    ```powershell
    Get-PnpDevice -Class Ports -Status OK | Select-Object FriendlyName, InstanceId
    ```
 
-2. **Compilar proyecto:**
+2. **Build project:**
+
    ```powershell
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
    ```
-   
-   Si hay error de entorno Python, limpiar primero:
+
+   If there's a Python environment error, clean first:
+
    ```powershell
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
    ```
 
-3. **Flashear (método más confiable):**
+3. **Flash (most reliable method):**
+
    ```powershell
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
    ```
 
-4. **Monitor serial (opcional):**
+4. **Serial monitor (optional):**
    ```powershell
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 monitor
    ```
 
-**Nota:** Reemplazar `COM5` con el puerto detectado en el paso 1.
+**Note:** Replace `COM5` with the port detected in step 1.
 
-## Prevención de Problemas
+## Problem Prevention
 
-### Archivos que NO deben modificarse:
-- `managed_components/` (se regenera automáticamente)
-- `build/` (archivos de compilación)
-- `sdkconfig.old` (backup automático)
+### Files that should NOT be modified:
 
-### Archivos críticos:
-- `main/CMakeLists.txt` - DEBE incluir `REQUIRES arduino-esp32`
-- `main/idf_component.yml` - DEBE incluir `espressif/arduino-esp32: '*'`
-- `sdkconfig` - DEBE tener `CONFIG_FREERTOS_HZ=1000`
+- `managed_components/` (auto-regenerated)
+- `build/` (build files)
+- `sdkconfig.old` (automatic backup)
 
-### Comandos de limpieza seguros:
+### Critical files:
+
+- `main/CMakeLists.txt` - MUST include `REQUIRES arduino-esp32`
+- `main/idf_component.yml` - MUST include `espressif/arduino-esp32: '*'`
+- `sdkconfig` - MUST have `CONFIG_FREERTOS_HZ=1000`
+
+### Safe cleanup commands:
+
 ```powershell
-# Limpiar build completo
+# Full build clean
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
 
-# Limpiar solo componentes gestionados
+# Clean only managed components
 Remove-Item -Recurse -Force managed_components
 Remove-Item -Recurse -Force build
 ```
 
-### .gitignore recomendado:
+### Recommended .gitignore:
+
 ```gitignore
 # Build artifacts
 build/

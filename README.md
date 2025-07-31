@@ -1,156 +1,161 @@
-# ESP-IDF con Arduino Template para Kiro
+# ESP-IDF with Arduino Template for Kiro
 
-Esta es una plantilla base para proyectos ESP-IDF que utiliza Arduino como componente, optimizada para trabajar con Kiro IDE.
+This is a base template for ESP-IDF projects that uses Arduino as a component, optimized for working with Kiro IDE.
 
-## Características
+## Features
 
-- **ESP-IDF Framework**: Utiliza el framework oficial de Espressif
-- **Arduino como Componente**: Permite usar las funciones familiares de Arduino (digitalWrite, pinMode, delay, etc.)
-- **Configuración Lista**: Proyecto preconfigurado y listo para usar
-- **LED Integrado**: Ejemplo básico que hace parpadear el LED integrado (GPIO2)
+- **ESP-IDF Framework**: Uses Espressif's official framework
+- **Arduino as Component**: Allows using familiar Arduino functions (digitalWrite, pinMode, delay, etc.)
+- **Ready Configuration**: Pre-configured project ready to use
+- **Built-in LED**: Basic example that blinks the built-in LED (GPIO2)
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
-├── main/                    # Componente principal de la aplicación
-│   ├── main.cpp            # Código principal (ejemplo LED parpadeante)
-│   ├── CMakeLists.txt      # Configuración de compilación con dependencia Arduino
-│   ├── CMakeLists.txt.example # Ejemplo de configuración
-│   └── idf_component.yml   # Dependencias del componente
-├── managed_components/      # Componentes gestionados automáticamente (26 total)
+├── main/                    # Main application component
+│   ├── main.cpp            # Main code (LED blink example)
+│   ├── CMakeLists.txt      # Build configuration with Arduino dependency
+│   ├── CMakeLists.txt.example # Configuration example
+│   └── idf_component.yml   # Component dependencies
+├── managed_components/      # Auto-managed components (26 total)
 │   ├── espressif__arduino-esp32/    # Arduino ESP32 core v3.2.1
-│   ├── espressif__esp-dsp/          # Procesamiento de señales digitales
-│   ├── espressif__esp-modbus/       # Soporte protocolo Modbus
-│   ├── espressif__esp_rainmaker/    # Plataforma IoT ESP RainMaker
-│   └── ... (22 componentes más)     # Componentes adicionales ESP-IDF
-├── build/                  # Artefactos de compilación (generados automáticamente)
-│   ├── ESP32_PLC-in-DC_Kiro.bin   # Binario principal de la aplicación
-│   ├── bootloader/bootloader.bin   # Binario del bootloader
-│   └── compile_commands.json       # Soporte para análisis de código
-├── .devcontainer/          # Entorno de desarrollo Docker
-├── .kiro/                  # Configuración y reglas de Kiro IDE
-│   └── steering/          # Documentación y guías del proyecto
-├── .vscode/               # Configuración de Kiro IDE
-├── CMakeLists.txt         # Configuración principal del proyecto
-├── sdkconfig              # Configuración ESP-IDF (FreeRTOS 1000Hz)
-├── dependencies.lock      # Bloqueo de dependencias del gestor de componentes
-├── README.md             # Este archivo (Español)
-└── README_EN.md          # Documentación en Inglés
+│   ├── espressif__esp-dsp/          # Digital Signal Processing
+│   ├── espressif__esp-modbus/       # Modbus protocol support
+│   ├── espressif__esp_rainmaker/    # ESP RainMaker IoT platform
+│   └── ... (22 more components)     # Additional ESP-IDF components
+├── build/                  # Build artifacts (auto-generated)
+│   ├── ESP32_PLC-in-DC_Kiro.bin   # Main application binary
+│   ├── bootloader/bootloader.bin   # Bootloader binary
+│   └── compile_commands.json       # Code analysis support
+├── .devcontainer/          # Docker development environment
+├── .kiro/                  # Kiro IDE configuration and steering
+│   └── steering/          # Project documentation and guides
+├── .vscode/               # Kiro IDE configuration
+├── CMakeLists.txt         # Main project configuration
+├── sdkconfig              # ESP-IDF configuration (FreeRTOS 1000Hz)
+├── dependencies.lock      # Component manager dependency lock
+├── README.md             # Project documentation (Spanish)
+└── README_EN.md          # This file (English)
 ```
 
-## Requisitos Previos
+## Prerequisites
 
-1. **ESP-IDF**: Versión 5.4.2 instalada en `%USERPROFILE%\esp\v5.4.2\esp-idf\`
-2. **Extensión ESP-IDF**: Instalada en Kiro IDE
-3. **Hardware**: Cualquier placa ESP32 compatible
-4. **Sistema Operativo**: Windows con PowerShell
+1. **ESP-IDF**: Version 5.4.2 installed at `%USERPROFILE%\esp\v5.4.2\esp-idf\`
+2. **ESP-IDF Extension**: Installed in Kiro IDE
+3. **Hardware**: Any compatible ESP32 board
+4. **Operating System**: Windows with PowerShell
 
-## Configuración Inicial
+## Initial Setup
 
-### 1. Configurar ESP-IDF en Kiro
+### 1. Configure ESP-IDF in Kiro
 
-1. Abre la paleta de comandos (`Ctrl+Shift+P`)
-2. Busca "ESP-IDF: Configure ESP-IDF Extension"
-3. Sigue las instrucciones para configurar tu instalación de ESP-IDF
+1. Open command palette (`Ctrl+Shift+P`)
+2. Search for "ESP-IDF: Configure ESP-IDF Extension"
+3. Follow instructions to configure your ESP-IDF installation
 
-### 2. Generar compile_commands.json (Requerido para Kiro)
+### 2. Generate compile_commands.json (Required for Kiro)
 
-Al abrir el proyecto por primera vez, Kiro mostrará el mensaje:
+When opening the project for the first time, Kiro will show the message:
 
 ```
 compile_commands.json is missing. This may cause errors with code analysis extensions.
 ```
 
-**Solución:** Haz clic en "Generate compile_commands.json" o ejecuta:
+**Solution:** Click "Generate compile_commands.json" or run:
 
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
-Esto generará el archivo necesario para el análisis de código.
+This will generate the file needed for code analysis.
 
-### 3. Seleccionar Target
+### 3. Select Target
 
-1. Abre la paleta de comandos
-2. Ejecuta "ESP-IDF: Set Espressif Device Target"
-3. Selecciona tu modelo de ESP32 (esp32, esp32s2, esp32s3, esp32c3, etc.)
+1. Open command palette
+2. Run "ESP-IDF: Set Espressif Device Target"
+3. Select your ESP32 model (esp32, esp32s2, esp32s3, esp32c3, etc.)
 
-## Uso
+## Usage
 
-### Compilar el Proyecto
+### Build Project
 
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
-O usa el comando de Kiro: `ESP-IDF: Build Project`
+Or use Kiro command: `ESP-IDF: Build Project`
 
-**⚠️ Importante:** Si obtienes un error de entorno Python como:
+**⚠️ Important:** If you get a Python environment error like:
+
 ```
 'python.exe' is currently active while the project was configured with different version
 Run 'idf.py fullclean' to start again
 ```
 
-**Solución:** Ejecuta primero una limpieza completa:
+**Solution:** Run a full clean first:
+
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
 ```
 
-### Identificar Puerto Serial
+### Identify Serial Port
 
-Antes de flashear, identifica el puerto correcto de tu ESP32:
+Before flashing, identify the correct port for your ESP32:
 
 ```powershell
 Get-PnpDevice -Class Ports -Status OK | Select-Object FriendlyName, InstanceId
 ```
 
-Busca dispositivos como:
+Look for devices like:
+
 - `Silicon Labs CP210x USB to UART Bridge (COM5)`
 - `USB-SERIAL CH340 (COM3)`
 - `USB Serial Port (COM4)`
 
-### Flashear a la Placa
+### Flash to Board
 
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 flash
 ```
 
-**Nota:** Reemplaza `COM5` con tu puerto serial detectado.
+**Note:** Replace `COM5` with your detected serial port.
 
-**⚠️ Si falla el flasheo con error de modo de arranque:**
+**⚠️ If flashing fails with boot mode error:**
 
-1. **Primer intento:** Usa velocidad más lenta:
+1. **First attempt:** Use slower speed:
+
    ```powershell
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 -b 115200 flash
    ```
 
-2. **Si persiste el problema:** Usa esptool directamente:
+2. **If problem persists:** Use esptool directly:
+
    ```powershell
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
    ```
 
-3. **Método manual:** Mantén presionado el botón BOOT de la placa mientras ejecutas el comando de flasheo.
+3. **Manual method:** Hold the BOOT button on the board while running the flash command.
 
-O usa el comando de Kiro: `ESP-IDF: Flash Device`
+Or use Kiro command: `ESP-IDF: Flash Device`
 
-### Monitor Serial
+### Serial Monitor
 
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 monitor
 ```
 
-O usa el comando de Kiro: `ESP-IDF: Monitor Device`
+Or use Kiro command: `ESP-IDF: Monitor Device`
 
-### Todo en Uno
+### All in One
 
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 build flash monitor
 ```
 
-## Código de Ejemplo
+## Example Code
 
-El proyecto incluye un ejemplo básico que hace parpadear el LED integrado:
+The project includes a basic example that blinks the built-in LED:
 
 ```cpp
 #include "Arduino.h"
@@ -158,145 +163,168 @@ El proyecto incluye un ejemplo básico que hace parpadear el LED integrado:
 extern "C" void app_main()
 {
     initArduino();
-    pinMode(2, OUTPUT);  // GPIO2 es el LED integrado
+    pinMode(2, OUTPUT);  // GPIO2 is the built-in LED
 
     while(true) {
-        digitalWrite(2, HIGH);  // Encender LED
-        delay(500);             // Esperar 500ms
-        digitalWrite(2, LOW);   // Apagar LED
-        delay(500);             // Esperar 500ms
+        digitalWrite(2, HIGH);  // Turn LED on
+        delay(500);             // Wait 500ms
+        digitalWrite(2, LOW);   // Turn LED off
+        delay(500);             // Wait 500ms
     }
 }
 ```
 
-## Personalización
+## Customization
 
-### Cambiar el Pin del LED
+### Change LED Pin
 
-Si tu placa usa un GPIO diferente para el LED integrado, modifica el número en `main.cpp`:
+If your board uses a different GPIO for the built-in LED, modify the number in `main.cpp`:
 
 ```cpp
-pinMode(TU_GPIO_AQUI, OUTPUT);
-digitalWrite(TU_GPIO_AQUI, HIGH);
-digitalWrite(TU_GPIO_AQUI, LOW);
+pinMode(YOUR_GPIO_HERE, OUTPUT);
+digitalWrite(YOUR_GPIO_HERE, HIGH);
+digitalWrite(YOUR_GPIO_HERE, LOW);
 ```
 
-### Agregar Más Funcionalidad
+### Add More Functionality
 
-Puedes usar todas las funciones de Arduino habituales:
+You can use all the usual Arduino functions:
 
 - `analogRead()`, `analogWrite()`
 - `Serial.begin()`, `Serial.print()`
 - `WiFi.begin()`, `WiFi.connect()`
-- Y muchas más...
+- And many more...
 
-## Configuración Avanzada
+## Advanced Configuration
 
-### Modificar Configuración del SDK
+### Modify SDK Configuration
 
 ```powershell
 & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py menuconfig
 ```
 
-Esto abre un menú de configuración donde puedes:
+This opens a configuration menu where you can:
 
-- Ajustar configuraciones de WiFi
-- Modificar configuraciones de memoria
-- Habilitar/deshabilitar componentes
-- Y mucho más
+- Adjust WiFi settings
+- Modify memory configurations
+- Enable/disable components
+- And much more
 
-### Agregar Componentes Adicionales
+### Add Additional Components
 
-Para agregar componentes de ESP-IDF, modifica el archivo `main/CMakeLists.txt`:
+To add ESP-IDF components, modify the `main/CMakeLists.txt` file:
 
 ```cmake
 idf_component_register(SRCS "main.cpp"
                        INCLUDE_DIRS "."
-                       REQUIRES arduino-esp32 tu_componente_aqui)
+                       REQUIRES arduino-esp32 your_component_here)
 ```
 
-## Solución de Problemas
+## Troubleshooting
 
-### Error de Dependencia Arduino (YA SOLUCIONADO)
+### Arduino Dependency Error (ALREADY FIXED)
 
-Si obtienes errores de compilación relacionados con funciones de Arduino no encontradas, verifica que el archivo `main/CMakeLists.txt` contenga:
+If you get build errors related to Arduino functions not found, verify that the `main/CMakeLists.txt` file contains:
 
 ```cmake
 idf_component_register(
     SRCS "main.cpp"
     INCLUDE_DIRS ""
-    REQUIRES arduino-esp32  # CRÍTICO: Requerido para funciones Arduino
+    REQUIRES arduino-esp32  # CRITICAL: Required for Arduino functions
 )
 ```
 
-**Nota:** Este template ya incluye la configuración correcta. Si modificas el archivo, asegúrate de mantener la línea `REQUIRES arduino-esp32`.
+**Note:** This template already includes the correct configuration. If you modify the file, make sure to keep the `REQUIRES arduino-esp32` line.
 
-### Error de FreeRTOS (YA SOLUCIONADO)
+### FreeRTOS Error (ALREADY FIXED)
 
-Si obtienes el error:
+If you get the error:
 
 ```
 esp32-arduino requires CONFIG_FREERTOS_HZ=1000 (currently 100)
 ```
 
-**Nota:** Este template ya tiene la configuración correcta (`CONFIG_FREERTOS_HZ=1000`) en el archivo `sdkconfig`. Si aún ves este error, verifica que el archivo `sdkconfig` esté presente y contenga la línea correcta.
+**Note:** This template already has the correct configuration (`CONFIG_FREERTOS_HZ=1000`) in the `sdkconfig` file. If you still see this error, verify that the `sdkconfig` file is present and contains the correct line.
 
-### Error de Compilación
+### Python Environment Error
 
-- Verifica que ESP-IDF esté correctamente instalado
-- Asegúrate de haber seleccionado el target correcto
-- Revisa que todas las dependencias estén instaladas
+If you get an error like:
 
-### Error de Flash
+```
+'python.exe' is currently active while the project was configured with different version
+Run 'idf.py fullclean' to start again
+```
+
+**Solution:** This is a common error when the ESP-IDF Python environment changes. Run:
+
+```powershell
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py fullclean
+& "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py build
+```
+
+### Build Error
+
+- Verify ESP-IDF is correctly installed
+- Make sure you've selected the correct target
+- Check that all dependencies are installed
+- If you get Python environment errors, use the solution above
+
+### Flash Error
 
 #### Error: "Wrong boot mode detected (0x13)"
+
 ```
-A fatal error occurred: Failed to connect to ESP32: Wrong boot mode detected (0x13)! 
+A fatal error occurred: Failed to connect to ESP32: Wrong boot mode detected (0x13)!
 The chip needs to be in download mode.
 ```
 
-**Soluciones en orden de prioridad:**
+**Solutions in order of priority:**
 
-1. **Usar velocidad más lenta:**
+1. **Use slower speed:**
+
    ```powershell
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; idf.py -p COM5 -b 115200 flash
    ```
 
-2. **Usar esptool directamente:**
+2. **Use esptool directly:**
+
    ```powershell
    & "$env:USERPROFILE\esp\v5.4.2\esp-idf\export.ps1"; python -m esptool --chip esp32 -p COM5 -b 115200 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\ESP32_PLC-in-DC_Kiro.bin
    ```
 
-3. **Método manual:** Mantén presionado el botón BOOT mientras ejecutas el flasheo.
+3. **Manual method:** Hold the BOOT button while running the flash command.
 
 #### Error: "The chip stopped responding"
-Si el chip se conecta pero se detiene durante la configuración del flash:
-- Usa esptool directamente (comando del punto 2 anterior)
-- Verifica la calidad del cable USB (debe soportar datos, no solo carga)
-- Intenta con un cable USB diferente
+
+If the chip connects but stops during flash configuration:
+
+- Use esptool directly (command from point 2 above)
+- Check USB cable quality (must support data, not just charging)
+- Try a different USB cable
 
 #### Error: "Could not open COM port"
-- Verifica que la placa esté conectada correctamente
-- Asegúrate de que el puerto serie sea el correcto usando: `Get-PnpDevice -Class Ports -Status OK`
-- Cierra otros programas que puedan estar usando el puerto (Arduino IDE, PuTTY, etc.)
-- Desconecta y reconecta el cable USB
 
-### El LED No Parpadea
+- Verify the board is connected correctly
+- Make sure the serial port is correct using: `Get-PnpDevice -Class Ports -Status OK`
+- Close other programs that might be using the port (Arduino IDE, PuTTY, etc.)
+- Disconnect and reconnect the USB cable
 
-- Verifica que estés usando el GPIO correcto para tu placa
-- Algunos ESP32 usan GPIO2, otros GPIO8 o GPIO10
-- Consulta la documentación de tu placa específica
+### LED Not Blinking
 
-## Recursos Útiles
+- Verify you're using the correct GPIO for your board
+- Some ESP32 use GPIO2, others GPIO8 or GPIO10
+- Check your specific board documentation
 
-- [Documentación ESP-IDF](https://docs.espressif.com/projects/esp-idf/)
+## Useful Resources
+
+- [ESP-IDF Documentation](https://docs.espressif.com/projects/esp-idf/)
 - [Arduino-ESP32 GitHub](https://github.com/espressif/arduino-esp32)
-- [Guías ESP32](https://randomnerdtutorials.com/getting-started-with-esp32/)
+- [ESP32 Guides](https://randomnerdtutorials.com/getting-started-with-esp32/)
 
-## Contribuir
+## Contributing
 
-Si encuentras mejoras para esta plantilla, siéntete libre de sugerir cambios o crear un fork del proyecto.
+If you find improvements for this template, feel free to suggest changes or create a fork of the project.
 
-## Licencia
+## License
 
-Este proyecto es de dominio público. Úsalo libremente para tus proyectos.
+This project is in the public domain. Use it freely for your projects.
