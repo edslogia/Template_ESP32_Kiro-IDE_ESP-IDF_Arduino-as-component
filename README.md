@@ -2,6 +2,27 @@
 
 This is a base template for ESP-IDF projects that uses Arduino as a component, optimized for working with Kiro IDE.
 
+## 🚀 Key Advantages
+
+### ✨ Smart Personalization
+- **AI-Powered Customization**: Kiro automatically adapts to your experience level and preferences
+- **Language Flexibility**: Choose between Spanish, English, or mixed comments and explanations
+- **Adaptive Learning**: The more you use it, the better it understands your coding style
+- **Experience-Based Assistance**: Different guidance for beginners, intermediate, and advanced developers
+
+### ⚡ Zero-Setup Configuration
+- **Pre-configured Environment**: All ESP-IDF + Arduino integration settings ready out-of-the-box
+- **Dependency Management**: 26+ components automatically managed and configured
+- **Build System Ready**: CMake configuration with proper Arduino dependencies included
+- **FreeRTOS Optimized**: Tick rate pre-configured to 1000Hz for Arduino compatibility
+- **Docker Support**: Consistent development environment across different machines
+
+### 🎯 Kiro IDE Integration
+- **Intelligent Code Analysis**: Pre-configured compile_commands.json generation
+- **Context-Aware Assistance**: Built-in steering rules for ESP32 development best practices
+- **Troubleshooting Guides**: Comprehensive error solutions and command references
+- **One-Click Commands**: Build, flash, and monitor with integrated IDE commands
+
 ## Features
 
 - **ESP-IDF Framework**: Uses Espressif's official framework
