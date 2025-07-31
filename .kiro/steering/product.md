@@ -21,3 +21,12 @@ ESP-IDF template project that integrates Arduino as a component for ESP32 microc
 - Learning ESP32 development  
 - Arduino + ESP-IDF hybrid projects
 - Educational projects
+
+## Developer
+
+**Created by Edwin González**
+- GitHub: [@edslogia](https://github.com/edslogia)
+- LinkedIn: [Edwin González](https://www.linkedin.com/in/edwin-gonzalez-959829358/)
+- X (Twitter): [@edwin91gc](https://twitter.com/edwin91gc)
+
+*ESP32 Template with intelligent personalization and zero-setup configuration, developed with Kiro IDE*

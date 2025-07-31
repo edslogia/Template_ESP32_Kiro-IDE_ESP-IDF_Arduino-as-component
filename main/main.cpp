@@ -1,3 +1,15 @@
+/**
+ * ESP32 Arduino-IDF Template
+ * 
+ * Template with intelligent personalization and zero-setup configuration
+ * Developed with Kiro IDE
+ * 
+ * @author Edwin González
+ * @github https://github.com/edslogia
+ * @linkedin https://www.linkedin.com/in/edwin-gonzalez-959829358/
+ * @twitter @edwin91gc
+ */
+
 #include "Arduino.h"
 
 extern "C" void app_main()

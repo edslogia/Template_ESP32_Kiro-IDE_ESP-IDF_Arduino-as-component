@@ -314,6 +314,15 @@ Si el chip se conecta pero se detiene durante la configuración del flash:
 - [Arduino-ESP32 GitHub](https://github.com/espressif/arduino-esp32)
 - [Guías ESP32](https://randomnerdtutorials.com/getting-started-with-esp32/)
 
+## Desarrollador
+
+**Creado por Edwin González**
+- 🐙 GitHub: [@edslogia](https://github.com/edslogia)
+- 💼 LinkedIn: [Edwin González](https://www.linkedin.com/in/edwin-gonzalez-959829358/)
+- 🐦 X (Twitter): [@edwin91gc](https://twitter.com/edwin91gc)
+
+*Plantilla ESP32 con personalización inteligente y configuración cero, desarrollada con Kiro IDE*
+
 ## Contribuir
 
 Si encuentras mejoras para esta plantilla, siéntete libre de sugerir cambios o crear un fork del proyecto.

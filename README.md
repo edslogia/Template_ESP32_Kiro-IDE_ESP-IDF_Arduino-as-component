@@ -342,6 +342,15 @@ If the chip connects but stops during flash configuration:
 - [Arduino-ESP32 GitHub](https://github.com/espressif/arduino-esp32)
 - [ESP32 Guides](https://randomnerdtutorials.com/getting-started-with-esp32/)
 
+## Developer
+
+**Created by Edwin González**
+- 🐙 GitHub: [@edslogia](https://github.com/edslogia)
+- 💼 LinkedIn: [Edwin González](https://www.linkedin.com/in/edwin-gonzalez-959829358/)
+- 🐦 X (Twitter): [@edwin91gc](https://twitter.com/edwin91gc)
+
+*ESP32 Template with intelligent personalization and zero-setup configuration, developed with Kiro IDE*
+
 ## Contributing
 
 If you find improvements for this template, feel free to suggest changes or create a fork of the project.
