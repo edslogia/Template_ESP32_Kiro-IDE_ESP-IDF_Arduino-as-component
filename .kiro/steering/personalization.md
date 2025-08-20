@@ -1,3 +1,6 @@
+---
+inclusion: always
+---
 # User Personalization Profile
 
 ## Instructions for AI Assistant
